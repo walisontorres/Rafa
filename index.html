@@ -3,19 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda da Rafa | Status Real-Time</title>
+    <title>Status: Agenda da Rafa</title>
     <style>
         :root {
-            --grená: #7a0d1e;
-            --vermelho: #d91e36;
-            --branco: #ffffff;
+            --grena: #7a0d1e;
+            --vermelho-vibrante: #d91e36;
+            --branco-puro: #ffffff;
             --gelo: #f8f9fa;
+            --sombra: rgba(122, 13, 30, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            /* Gradiente de fundo elegante */
-            background: radial-gradient(circle at center, var(--branco) 0%, #f2d5d8 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            /* Design 2: Fundo com gradiente elegante */
+            background: radial-gradient(circle at center, var(--branco-puro) 0%, #f2d5d8 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -25,11 +30,11 @@
         }
 
         #container {
-            background: var(--branco);
-            padding: 40px;
+            background: var(--branco-puro);
+            padding: 40px 30px;
             border-radius: 30px;
-            box-shadow: 0 20px 40px rgba(122, 13, 30, 0.15);
-            max-width: 400px;
+            box-shadow: 0 20px 50px var(--sombra);
+            max-width: 420px;
             width: 90%;
             text-align: center;
             border: 1px solid rgba(122, 13, 30, 0.1);
@@ -37,22 +42,23 @@
             overflow: hidden;
         }
 
-        /* Detalhe lateral grená */
+        /* Detalhe estético no topo */
         #container::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 6px;
-            background: linear-gradient(90deg, var(--grená), var(--vermelho));
+            top: 0; left: 0; width: 100%; height: 8px;
+            background: linear-gradient(90deg, var(--grena), var(--vermelho-vibrante));
         }
 
+        /* Design 1: Formato da foto melhorado */
         .foto-wrapper {
-            width: 130px;
-            height: 130px;
+            width: 140px;
+            height: 140px;
             margin: 0 auto 20px;
             border-radius: 50%;
-            padding: 5px;
-            background: linear-gradient(45deg, var(--grená), var(--vermelho));
-            box-shadow: 0 8px 15px rgba(122, 13, 30, 0.2);
+            padding: 6px;
+            background: linear-gradient(45deg, var(--grena), var(--vermelho-vibrante));
+            box-shadow: 0 10px 20px var(--sombra);
         }
 
         #foto-rafa {
@@ -60,67 +66,84 @@
             height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--branco);
+            border: 4px solid var(--branco-puro);
+            display: block;
         }
 
         h1 {
-            font-size: 1.4rem;
-            color: var(--grená);
-            margin: 10px 0;
+            font-size: 1.5rem;
+            color: var(--grena);
+            margin: 15px 0 5px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            font-weight: 900;
         }
 
-        /* BARRA DE STRESS */
-        .stress-container {
+        /* Design 2: Efeito de Urgência (Barra de Stress) */
+        .stress-box {
             margin: 25px 0;
-            text-align: left;
+            background: #fff5f6;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid #fce4e7;
         }
+
         .stress-label {
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: var(--vermelho);
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--grena);
             display: flex;
             justify-content: space-between;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
         }
+
         .stress-bar-bg {
-            background: #eee;
-            height: 10px;
+            background: #e0e0e0;
+            height: 12px;
             border-radius: 10px;
             overflow: hidden;
         }
+
         .stress-bar-fill {
             height: 100%;
-            width: 0%; /* Animado via JS */
-            background: linear-gradient(90deg, var(--vermelho), var(--grená));
-            transition: width 1s ease-in-out;
+            width: 0%; /* Animado pelo JS */
+            background: linear-gradient(90deg, var(--vermelho-vibrante), var(--grena));
+            box-shadow: 0 0 10px rgba(217, 30, 54, 0.4);
+            transition: width 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* CRONÔMETRO ANIMADO */
+        /* Cronômetro com Animação */
         #timer {
-            font-size: 2.2rem;
+            font-size: 2.4rem;
             font-weight: 900;
-            color: var(--grená);
-            background: var(--gelo);
-            padding: 15px;
-            border-radius: 15px;
+            color: var(--grena);
             margin: 20px 0;
-            transition: all 0.3s;
-        }
-        .unidade {
-            font-size: 0.9rem;
-            display: block;
-            color: var(--vermelho);
-            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
         }
 
-        #status-frase {
+        .tempo-detalhe {
+            font-size: 1rem;
+            color: var(--vermelho-vibrante);
+            margin-top: 8px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        #frase-status {
             font-style: italic;
             color: #666;
-            font-size: 0.9rem;
-            min-height: 1.2em;
+            font-size: 0.95rem;
+            margin-top: 15px;
+            min-height: 2.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 10px;
         }
+
     </style>
 </head>
 <body>
@@ -132,7 +155,7 @@
         
         <h1>Agenda Lotada</h1>
         
-        <div class="stress-container">
+        <div class="stress-box">
             <div class="stress-label">
                 <span>Nível de Ocupação</span>
                 <span id="stress-percent">0%</span>
@@ -142,55 +165,64 @@
             </div>
         </div>
 
-        <div id="timer">Caculando...</div>
+        <div id="timer">
+            <span id="dias-count">0</span>
+            <span class="tempo-detalhe" id="relogio-count">00:00:00</span>
+        </div>
         
-        <p id="status-frase">Carregando status...</p>
+        <p id="frase-status">Sincronizando cronograma...</p>
     </div>
 
     <script>
+        // Data de início: 12/03/2026 às 0h
         const dataInicio = new Date(Date.UTC(2026, 2, 12, 0, 0, 0));
 
+        // Lista de frases atualizada
         const frases = [
-            "Rafa está operando em capacidade máxima.",
-            "Novas vagas apenas em uma realidade paralela.",
-            "Status: Vivendo à base de café e cronogramas.",
-            "A produtividade aqui não conhece limites.",
-            "Agenda mais disputada que ingresso de show."
+            "Dormir é para os fracos, a Rafa tem planilhas.",
+            "Vaga na agenda? Só com indicação do Papa.",
+            "Status: Construindo um império, um café por vez.",
+            "Se encontrar a Rafa, ofereça um energético.",
+            "Agenda fechada por tempo indeterminado. Tente em 2027.",
+            "A produtividade aqui já quebrou o ponteiro!",
+            "Rafa operando em modo: Milagreiro Ativado."
         ];
 
-        function atualizar() {
+        function atualizarPagina() {
             const agora = new Date();
             const diff = agora - dataInicio;
 
             if (diff < 0) {
-                document.getElementById('timer').innerText = "Começa em breve!";
+                document.getElementById('timer').innerHTML = "A contagem regressiva ainda não começou.";
                 return;
             }
 
-            const d = Math.floor(diff / 86400000);
-            const h = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
-            const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
-            const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+            const dias = Math.floor(diff / 86400000);
+            const horas = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
+            const minutos = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+            const segundos = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
 
-            // Atualiza Timer
-            document.getElementById('timer').innerHTML = 
-                `${d}d <span class="unidade">${h}h ${m}m ${s}s</span>`;
+            // Atualiza números
+            document.getElementById('dias-count').innerText = dias + " DIAS";
+            document.getElementById('relogio-count').innerText = `${horas}:${minutos}:${segundos}`;
 
-            // Lógica da Barra de Stress (Simulada para crescer nos primeiros 30 dias)
-            const metaDias = 30; 
-            let porcentagem = Math.min((d / metaDias) * 100, 100).toFixed(0);
-            // Se já passou de 30 dias, flutua entre 95% e 100% para dar realismo
-            if (d >= metaDias) porcentagem = 95 + Math.floor(Math.random() * 6);
+            // Lógica da Barra de Ocupação (Simula atingir 98% em 30 dias)
+            let ocupacao = Math.min((dias / 30) * 100, 98).toFixed(1);
+            if (dias > 30) ocupacao = (98 + Math.random() * 1.5).toFixed(1); // Oscilação realista
 
-            document.getElementById('stress-fill').style.width = porcentagem + "%";
-            document.getElementById('stress-percent').innerText = porcentagem + "%";
+            document.getElementById('stress-fill').style.width = ocupacao + "%";
+            document.getElementById('stress-percent').innerText = ocupacao + "%";
 
-            // Troca frase baseada no dia
-            document.getElementById('status-frase').innerText = frases[d % frases.length];
+            // Troca a frase aleatoriamente a cada atualização de página (ou a cada 10 seg)
+            if (!window.fraseDefinida) {
+                document.getElementById('frase-status').innerText = frases[Math.floor(Math.random() * frases.length)];
+                window.fraseDefinida = true;
+            }
         }
 
-        setInterval(atualizar, 1000);
-        atualizar();
+        // Executa a cada segundo
+        setInterval(atualizarPagina, 1000);
+        atualizarPagina();
     </script>
 </body>
 </html>
