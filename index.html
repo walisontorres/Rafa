@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda da Rafa</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        #container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        #foto-rafa {
+            max-width: 300px; /* Ajuste o tamanho da foto aqui */
+            height: auto;
+            border-radius: 50%; /* Torna a foto redonda */
+            margin-bottom: 20px;
+            display: block; /* Garante que a foto fique acima do texto */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        #timer {
+            font-size: 2em;
+            font-weight: bold;
+            color: #e44d26; /* Cor do cronômetro */
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <img id="foto-rafa" src="sua-foto.jpg" alt="Foto da Rafa">
+        
+        <h1>Tempo da agenda da Rafa cheia:</h1>
+        <div id="timer">Aguardando...</div>
+    </div>
+
+    <script>
+        // Data e hora de início: 12 de Março de 2026 às 0h UTC
+        // JavaScript usa meses baseados em zero, então Março é o mês 2
+        const dataInicio = new Date(Date.UTC(2026, 2, 12, 0, 0, 0));
+
+        function atualizarCronometro() {
+            const agora = new Date();
+            const diferenca = agora - dataInicio;
+
+            if (diferenca < 0) {
+                document.getElementById('timer').innerText = "A contagem ainda não começou!";
+                return;
+            }
+
+            const segundosTotais = Math.floor(diferenca / 1000);
+            const dias = Math.floor(segundosTotais / 86400);
+            const horas = Math.floor((segundosTotais % 86400) / 3600);
+            const minutos = Math.floor((segundosTotais % 3600) / 60);
+            const segundos = segundosTotais % 60;
+
+            // Formatação para garantir dois dígitos (ex: 05)
+            const horasFormatadas = String(horas).padStart(2, '0');
+            const minutosFormatados = String(minutos).padStart(2, '0');
+            const segundosFormatados = String(segundos).padStart(2, '0');
+
+            document.getElementById('timer').innerText = 
+                `${dias} dias, ${horasFormatadas}:${minutosFormatados}:${segundosFormatados}`;
+        }
+
+        // Atualiza o cronômetro imediatamente e depois a cada segundo
+        atualizarCronometro(); 
+        setInterval(atualizarCronometro, 1000);
+    </script>
+
+</body>
+</html>
