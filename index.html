@@ -3,92 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda da Rafa</title>
+    <title>Agenda da Rafa | Status Real-Time</title>
     <style>
+        :root {
+            --grená: #7a0d1e;
+            --vermelho: #d91e36;
+            --branco: #ffffff;
+            --gelo: #f8f9fa;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f0f0f0;
+            font-family: 'Inter', -apple-system, sans-serif;
+            /* Gradiente de fundo elegante */
+            background: radial-gradient(circle at center, var(--branco) 0%, #f2d5d8 100%);
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            color: #333;
         }
 
         #container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background: var(--branco);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(122, 13, 30, 0.15);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid rgba(122, 13, 30, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Detalhe lateral grená */
+        #container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 6px;
+            background: linear-gradient(90deg, var(--grená), var(--vermelho));
+        }
+
+        .foto-wrapper {
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            padding: 5px;
+            background: linear-gradient(45deg, var(--grená), var(--vermelho));
+            box-shadow: 0 8px 15px rgba(122, 13, 30, 0.2);
         }
 
         #foto-rafa {
-            max-width: 300px; /* Ajuste o tamanho da foto aqui */
-            height: auto;
-            border-radius: 50%; /* Torna a foto redonda */
-            margin-bottom: 20px;
-            display: block; /* Garante que a foto fique acima do texto */
-            margin-left: auto;
-            margin-right: auto;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--branco);
         }
 
         h1 {
-            color: #333;
-            margin-bottom: 10px;
+            font-size: 1.4rem;
+            color: var(--grená);
+            margin: 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        #timer {
-            font-size: 2em;
+        /* BARRA DE STRESS */
+        .stress-container {
+            margin: 25px 0;
+            text-align: left;
+        }
+        .stress-label {
+            font-size: 0.8rem;
             font-weight: bold;
-            color: #e44d26; /* Cor do cronômetro */
-            margin-top: 20px;
+            color: var(--vermelho);
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .stress-bar-bg {
+            background: #eee;
+            height: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .stress-bar-fill {
+            height: 100%;
+            width: 0%; /* Animado via JS */
+            background: linear-gradient(90deg, var(--vermelho), var(--grená));
+            transition: width 1s ease-in-out;
+        }
+
+        /* CRONÔMETRO ANIMADO */
+        #timer {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--grená);
+            background: var(--gelo);
+            padding: 15px;
+            border-radius: 15px;
+            margin: 20px 0;
+            transition: all 0.3s;
+        }
+        .unidade {
+            font-size: 0.9rem;
+            display: block;
+            color: var(--vermelho);
+            font-weight: 500;
+        }
+
+        #status-frase {
+            font-style: italic;
+            color: #666;
+            font-size: 0.9rem;
+            min-height: 1.2em;
         }
     </style>
 </head>
 <body>
 
     <div id="container">
-        <img id="foto-rafa" src="sua-foto.jpg" alt="Foto da Rafa">
+        <div class="foto-wrapper">
+            <img id="foto-rafa" src="sua-foto.jpg" alt="Rafa">
+        </div>
         
-        <h1>Aguardando nova abertura da agenda Rafa:</h1>
-        <div id="timer">Aguardando...</div>
+        <h1>Agenda Lotada</h1>
+        
+        <div class="stress-container">
+            <div class="stress-label">
+                <span>Nível de Ocupação</span>
+                <span id="stress-percent">0%</span>
+            </div>
+            <div class="stress-bar-bg">
+                <div id="stress-fill" class="stress-bar-fill"></div>
+            </div>
+        </div>
+
+        <div id="timer">Caculando...</div>
+        
+        <p id="status-frase">Carregando status...</p>
     </div>
 
     <script>
-        // Data e hora de início: 12 de Março de 2026 às 0h UTC
-        // JavaScript usa meses baseados em zero, então Março é o mês 2
         const dataInicio = new Date(Date.UTC(2026, 2, 12, 0, 0, 0));
 
-        function atualizarCronometro() {
-            const agora = new Date();
-            const diferenca = agora - dataInicio;
+        const frases = [
+            "Rafa está operando em capacidade máxima.",
+            "Novas vagas apenas em uma realidade paralela.",
+            "Status: Vivendo à base de café e cronogramas.",
+            "A produtividade aqui não conhece limites.",
+            "Agenda mais disputada que ingresso de show."
+        ];
 
-            if (diferenca < 0) {
-                document.getElementById('timer').innerText = "A contagem ainda não começou!";
+        function atualizar() {
+            const agora = new Date();
+            const diff = agora - dataInicio;
+
+            if (diff < 0) {
+                document.getElementById('timer').innerText = "Começa em breve!";
                 return;
             }
 
-            const segundosTotais = Math.floor(diferenca / 1000);
-            const dias = Math.floor(segundosTotais / 86400);
-            const horas = Math.floor((segundosTotais % 86400) / 3600);
-            const minutos = Math.floor((segundosTotais % 3600) / 60);
-            const segundos = segundosTotais % 60;
+            const d = Math.floor(diff / 86400000);
+            const h = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
+            const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+            const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
 
-            // Formatação para garantir dois dígitos (ex: 05)
-            const horasFormatadas = String(horas).padStart(2, '0');
-            const minutosFormatados = String(minutos).padStart(2, '0');
-            const segundosFormatados = String(segundos).padStart(2, '0');
+            // Atualiza Timer
+            document.getElementById('timer').innerHTML = 
+                `${d}d <span class="unidade">${h}h ${m}m ${s}s</span>`;
 
-            document.getElementById('timer').innerText = 
-                `${dias} dias, ${horasFormatadas}:${minutosFormatados}:${segundosFormatados}`;
+            // Lógica da Barra de Stress (Simulada para crescer nos primeiros 30 dias)
+            const metaDias = 30; 
+            let porcentagem = Math.min((d / metaDias) * 100, 100).toFixed(0);
+            // Se já passou de 30 dias, flutua entre 95% e 100% para dar realismo
+            if (d >= metaDias) porcentagem = 95 + Math.floor(Math.random() * 6);
+
+            document.getElementById('stress-fill').style.width = porcentagem + "%";
+            document.getElementById('stress-percent').innerText = porcentagem + "%";
+
+            // Troca frase baseada no dia
+            document.getElementById('status-frase').innerText = frases[d % frases.length];
         }
 
-        // Atualiza o cronômetro imediatamente e depois a cada segundo
-        atualizarCronometro(); 
-        setInterval(atualizarCronometro, 1000);
+        setInterval(atualizar, 1000);
+        atualizar();
     </script>
-
 </body>
 </html>
